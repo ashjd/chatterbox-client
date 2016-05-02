@@ -1,7 +1,7 @@
 
 
 var app = { 
-  server : 'https://api.parse.com/1/classes/messages'
+  server: 'https://api.parse.com/1/classes/messages'
 };
 
 app.init = function () {
@@ -54,4 +54,8 @@ app.addMessage = function (message) {
   $chat.append($username);
   $chat.append ($text);
   $('#chats').append($chat);
+};
+
+app.addRoom = function (roomName) {
+  $('#roomSelect').append('<option value = ' + roomName + '>' + roomName + '</option>');
 };
