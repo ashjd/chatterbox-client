@@ -5,13 +5,11 @@ var app = {
 };
 
 app.init = function () {
-
-
+  app.fetch();
 };
 
 app.send = function (message) {
   $.ajax({
-    // This is the url you should use to communicate with the parse API server.
     url: app.server,
     type: 'POST',
     data: JSON.stringify(message),
@@ -20,7 +18,6 @@ app.send = function (message) {
       console.log('chatterbox: Message sent');
     },
     error: function (data) {
-      // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
       console.error('chatterbox: Failed to send message', data);
     }
   });
@@ -28,17 +25,20 @@ app.send = function (message) {
 
 app.fetch = function () {
   $.ajax({
-    // This is the url you should use to communicate with the parse API server.
     url: app.server,
     type: 'GET',
-    data: JSON.stringify(message),
+    data: JSON.stringify({}),
     contentType: 'application/json',
     success: function (data) {
-      console.log('chatterbox: Message received', data);
+      console.log('chatterbox: Messages received', data.results);
+      _.each (data.results, function (message) {
+        app.addMessage(message);
+      });
+
     },
     error: function (data) {
       // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
-      console.error('chatterbox: Failed to receive message');
+      console.error('chatterbox: Failed to retrieve messages');
     }
   });
 };
@@ -48,5 +48,10 @@ app.clearMessages = function() {
 };
 
 app.addMessage = function (message) {
-  $('#chats').append(message);
+  var $chat = $('<div class="chat" />');
+  var $username = $('<div class="username" />').text(message.username + ': ');
+  var $text = $('<div/>').text(message.text);
+  $chat.append($username);
+  $chat.append ($text);
+  $('#chats').append($chat);
 };
