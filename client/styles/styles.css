@@ -30,6 +30,10 @@ body {
     padding-left: 20px;
 }
 
+#main {
+    background-color: #d6f5f5
+}
+
 #main .error {
     border: 1px solid red;
     background: #FDEFF0;
@@ -86,5 +90,37 @@ form input[type=text] {
 .friend {
     color: #fff;
     background-color: #0090da;
+}
+
+.usernameInput {
+    padding: 5px 0; 
+    margin-top: 5px; 
+}
+
+.msgInput {
+    padding: 7px 0;
+}
+
+#msg {
+    margin-left: 8px;
+}
+
+#send {
+    position: relative;
+    left: 50%;
+}
+
+#chats {
+    overflow-y: scroll;
+    height: 500px;
+    background-color: #ebfafa
+}
+
+.friendBox {
+    margin-left: 60px;
+}
+
+.highlight {
+    background-color: blue;
 }
 

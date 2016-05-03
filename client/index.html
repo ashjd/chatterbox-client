@@ -17,25 +17,30 @@
     <div id="main">
       <h1>chatterbox</h1>
       <form>
+      <span>
         Room: 
          <select id = "roomSelect">
            <option value="lobby"> Lobby </option>
            <option value="addRoom"> Add Room </option>
          </select>
-
+         <label class="friendBox">
          Friends:
          <select id = "friend">
          </select> 
-          <div>
+         </label>
+         </span>
+          <div class="usernameInput">
             Username :
             <input type="text" id="name"></input>
           </div>
-          <div>
+          <div class="msgInput">
            Message :
             <input type="text" id="msg"></input>
           </div>
           <button type="submit" id="send"> Submit </button>
       </form>
+      <button id="refreshMsg"> Refresh Messages </button> 
+        
     </div>
     <div id="chats">
     </div>

@@ -43,10 +43,8 @@ app.fetch = function () {
           app.addMessage(message);
         }
       });
-
     },
     error: function (data) {
-      // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
       console.error('chatterbox: Failed to retrieve messages');
     }
   });
@@ -59,10 +57,14 @@ app.clearMessages = function() {
 app.addMessage = function (message) {
   var $chat = $('<div class="chat" />');
   var $username = $('<div class="username" data-username=' + message.username + '/>').text(message.username + ': ');
-  var $text = $('<div/>').text(message.text);
+  var escapedText = _.escape(message.text);
+  var $text = $('<div/>').text(escapedText);
   $chat.append($username);
   $chat.append ($text);
   $('#chats').append($chat);
+  // if (app.friends.indexOf(message.username) !== -1) {
+  //   $username.toggleClass('highlight');
+  // }
 
 };
 
@@ -82,13 +84,14 @@ app.addFriend = function () {
 };
 
 app.handleSubmit = function() {
-  console.log('Got to handleSubmit!');
   var name = $('#name').val();
   var msg = $('#msg').val();
+  var roomName = $('#roomSelect').find(':selected').text();
 
   var message = {
     'username': name,
-    'text': msg
+    'text': msg,
+    'roomname': roomName
   };
 
   app.send(message);
@@ -110,13 +113,25 @@ $(document).on('change', '#roomSelect', function() {
   });
 });
 
+// $(document).on('change', '#friend', function() {
+//   var friendName = $(this).val();
+//   _.each(app.messages, function(msg) {
+//     if (msg.username === friendName) {
+//       msg.text
+//     }
+//   });
+// });
+
 $(document).on('click', '.username', app.addFriend);
 $(document).on('click', '#send', function(evt) {
   evt.preventDefault();
   app.handleSubmit();
 });
+$(document).on('click', '#refreshMsg', function(event) {
+  event.preventDefault();
+  app.fetch();
+});
 
-
-setInterval(app.fetch, 5000);
+// setInterval(app.fetch, 5000);
 
 
