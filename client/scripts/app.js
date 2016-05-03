@@ -1,7 +1,8 @@
 
 
 var app = { 
-  server: 'https://api.parse.com/1/classes/messages'
+  server: 'https://api.parse.com/1/classes/messages',
+  friends: []
 };
 
 app.init = function () {
@@ -59,3 +60,27 @@ app.addMessage = function (message) {
 app.addRoom = function (roomName) {
   $('#roomSelect').append('<option value = ' + roomName + '>' + roomName + '</option>');
 };
+
+app.addFriend = function () {
+  var friendName = $(this).attr('value');
+  console.log('friendName: ' + friendName);
+  $('#friend').append('<option value = ' + friendName + '>' + friendName + '</option>');
+};
+
+
+$(document).on('click', '.username', app.addFriend);
+
+// $('#main').on('click', '.username', function(event) {
+//   app.addFriend(event.target);
+// });
+
+// $('.username').on('click', function(event) {
+//   event.preventDefault();
+//   app.addFriend($(this).data('username'));
+// });
+
+// $(document).ready(function() {
+//   $('.username').click(function() {
+//     app.addFriend(event.target);
+//   });
+// });
