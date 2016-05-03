@@ -2,7 +2,9 @@
 
 var app = { 
   server: 'https://api.parse.com/1/classes/messages',
-  friends: []
+  friends: [],
+  rooms: [],
+  messages: []
 };
 
 app.init = function () {
@@ -35,7 +37,11 @@ app.fetch = function () {
     success: function (data) {
       console.log('chatterbox: Messages received', data.results);
       _.each (data.results, function (message) {
-        app.addMessage(message);
+        if (app.messages.indexOf(message) === -1) {
+          app.messages.push(message);
+          app.addRoom(message.roomname);
+          app.addMessage(message);
+        }
       });
 
     },
@@ -61,7 +67,10 @@ app.addMessage = function (message) {
 };
 
 app.addRoom = function (roomName) {
-  $('#roomSelect').append('<option value = ' + roomName + '>' + roomName + '</option>');
+  if (app.rooms.indexOf(roomName) === -1) {
+    app.rooms.push(roomName);
+    $('#roomSelect').append('<option value = ' + roomName + '>' + roomName + '</option>');
+  }
 };
 
 app.addFriend = function () {
@@ -70,8 +79,6 @@ app.addFriend = function () {
     app.friends.push(friendName);
     $('#friend').append('<option value = ' + friendName + '>' + friendName + '</option>');
   }
-  
-
 };
 
 app.handleSubmit = function() {
@@ -88,11 +95,27 @@ app.handleSubmit = function() {
   app.fetch();
 };
 
+$(document).on('change', '#roomSelect', function() {
+  if ($(this).val() === 'addRoom') {
+    var roomName = prompt('Please enter room name to be added');
+    app.addRoom(roomName);
+  }
+  var selectedRoom = $(this).val();
+  var selectedRoomMessages = _.filter(app.messages, function(msg) { 
+    return msg.roomname === selectedRoom;
+  });
+  app.clearMessages();
+  _.each(selectedRoomMessages, function(message) {
+    app.addMessage(message);
+  });
+});
+
 $(document).on('click', '.username', app.addFriend);
 $(document).on('click', '#send', function(evt) {
   evt.preventDefault();
   app.handleSubmit();
 });
+
 
 setInterval(app.fetch, 5000);
 
