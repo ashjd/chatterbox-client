@@ -17,6 +17,8 @@ app.send = function (message) {
     contentType: 'application/json',
     success: function (data) {
       console.log('chatterbox: Message sent');
+      app.addMessage(message);
+      app.fetch();
     },
     error: function (data) {
       console.error('chatterbox: Failed to send message', data);
@@ -28,7 +30,7 @@ app.fetch = function () {
   $.ajax({
     url: app.server,
     type: 'GET',
-    data: JSON.stringify({}),
+    data: { createdAt: -1 },
     contentType: 'application/json',
     success: function (data) {
       console.log('chatterbox: Messages received', data.results);
@@ -50,7 +52,7 @@ app.clearMessages = function() {
 
 app.addMessage = function (message) {
   var $chat = $('<div class="chat" />');
-  var $username = $('<div class="username" />').text(message.username + ': ');
+  var $username = $('<div class="username" data-username=' + message.username + '/>').text(message.username + ': ');
   var $text = $('<div/>').text(message.text);
   $chat.append($username);
   $chat.append ($text);
@@ -62,25 +64,26 @@ app.addRoom = function (roomName) {
 };
 
 app.addFriend = function () {
-  var friendName = $(this).attr('value');
-  console.log('friendName: ' + friendName);
+  var friendName = $(this).data('username');
   $('#friend').append('<option value = ' + friendName + '>' + friendName + '</option>');
 };
 
+app.handleSubmit = function() {
+  var message = {};
+  var name = $('#name').val();
+  var msg = $('#msg').val();
+  message.username = name;
+  message.text = msg;
+  console.log ('name = ' + name);
+  app.send(message);
+
+};
 
 $(document).on('click', '.username', app.addFriend);
+//$(document).on('submit', app.handleSubmit);
 
-// $('#main').on('click', '.username', function(event) {
-//   app.addFriend(event.target);
-// });
+$('#send').submit(function(event) {
+  app.handleSubmit();
+  event.preventDefault();
+});
 
-// $('.username').on('click', function(event) {
-//   event.preventDefault();
-//   app.addFriend($(this).data('username'));
-// });
-
-// $(document).ready(function() {
-//   $('.username').click(function() {
-//     app.addFriend(event.target);
-//   });
-// });

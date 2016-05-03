@@ -16,15 +16,26 @@
   <body>
     <div id="main">
       <h1>chatterbox</h1>
-      Room: 
-       <select id = "roomSelect">
-         <option value="lobby"> Lobby </option>
-         <option value="addRoom"> Add Room </option>
-       </select>
+      <form id = "send" >
+        Room: 
+         <select id = "roomSelect">
+           <option value="lobby"> Lobby </option>
+           <option value="addRoom"> Add Room </option>
+         </select>
 
-       Friends:
-       <select id = "friend">
-       </select>
+         Friends:
+         <select id = "friend">
+         </select> 
+          <div>
+            Username :
+            <input type="text" id ="name"></input>
+          </div>
+          <div>
+           Message :
+            <input type="text" id ="msg"></input>
+          </div>
+          <button type="submit"> Submit </button>
+      </form>
     </div>
     <div id="chats">
     </div>
