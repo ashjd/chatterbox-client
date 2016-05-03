@@ -7,6 +7,7 @@ var app = {
 
 app.init = function () {
   app.fetch();
+
 };
 
 app.send = function (message) {
@@ -18,7 +19,6 @@ app.send = function (message) {
     success: function (data) {
       console.log('chatterbox: Message sent');
       app.addMessage(message);
-      app.fetch();
     },
     error: function (data) {
       console.error('chatterbox: Failed to send message', data);
@@ -57,6 +57,7 @@ app.addMessage = function (message) {
   $chat.append($username);
   $chat.append ($text);
   $('#chats').append($chat);
+
 };
 
 app.addRoom = function (roomName) {
@@ -65,25 +66,34 @@ app.addRoom = function (roomName) {
 
 app.addFriend = function () {
   var friendName = $(this).data('username');
-  $('#friend').append('<option value = ' + friendName + '>' + friendName + '</option>');
+  if (app.friends.indexOf(friendName) === -1) {
+    app.friends.push(friendName);
+    $('#friend').append('<option value = ' + friendName + '>' + friendName + '</option>');
+  }
+  
+
 };
 
 app.handleSubmit = function() {
-  var message = {};
+  console.log('Got to handleSubmit!');
   var name = $('#name').val();
   var msg = $('#msg').val();
-  message.username = name;
-  message.text = msg;
-  console.log ('name = ' + name);
-  app.send(message);
 
+  var message = {
+    'username': name,
+    'text': msg
+  };
+
+  app.send(message);
+  app.fetch();
 };
 
 $(document).on('click', '.username', app.addFriend);
-//$(document).on('submit', app.handleSubmit);
-
-$('#send').submit(function(event) {
+$(document).on('click', '#send', function(evt) {
+  evt.preventDefault();
   app.handleSubmit();
-  event.preventDefault();
 });
+
+setInterval(app.fetch, 5000);
+
 
